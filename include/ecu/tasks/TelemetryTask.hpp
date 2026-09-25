@@ -15,7 +15,7 @@ public:
     explicit TelemetryTask(core::CanRingBuffer<QueueCapacity>& outQueue) noexcept
         : outQueue_(outQueue) {}
 
-    // 50 Hz periyodik adım: Dinamik modelden telemetriyi alır, kodlar ve kuyruğa atar.
+    // 50 Hz periodic step: Retrieves telemetry from the dynamic model, encodes it, and places it in the queue.
     void step(bool throttle = true, bool brake = false) noexcept {
         vehicleModel_.step(throttle, brake);
         currentTelemetry_ = vehicleModel_.getTelemetrySnapshot();
