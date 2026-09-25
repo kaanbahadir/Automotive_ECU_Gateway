@@ -43,6 +43,8 @@ A production-grade, AUTOSAR-inspired Automotive Electronic Control Unit (ECU) Te
 |    - VirtualCanTransceiver    |
 +-------------------------------+
 
+```
+
 ---
 
 ## 🚀 Quick Start & Interactive Demo
