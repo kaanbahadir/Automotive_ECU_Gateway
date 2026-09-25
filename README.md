@@ -42,3 +42,17 @@ A production-grade, AUTOSAR-inspired Automotive Electronic Control Unit (ECU) Te
 |      - ICanTransceiver        |
 |    - VirtualCanTransceiver    |
 +-------------------------------+
+
+---
+
+## 🚀 Quick Start & Interactive Demo
+
+### Prerequisites
+- C++17 compliant compiler (AppleClang, GCC, or Clang)
+- CMake 3.20+
+- POSIX-compliant terminal environment (macOS / Linux)
+
+### Build
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+cmake --build build
