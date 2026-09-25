@@ -10,3 +10,35 @@ A production-grade, AUTOSAR-inspired Automotive Electronic Control Unit (ECU) Te
 ---
 
 ## 🏛️ Layered Architecture (AUTOSAR Style)
+
+```text
++---------------------------------------------------------------+
+|                    Application Layer (app/)                   |
+|                   - VehicleDynamicsModel                      |
+|       (Throttle/Brake dynamics, thermal & voltage state)      |
++-------------------------------+-------------------------------+
+                                |
++-------------------------------v-------------------------------+
+|                      Tasks Layer (tasks/)                     |
+|           - TelemetryTask (50 Hz periodic producer)           |
+|           - CanDispatchTask (Asynchronous consumer)           |
++---------------+-------------------------------+---------------+
+                |                               |
++---------------v---------------+       +-------v---------------+
+|        Core / IPC (core/)     |       |   Diagnostics (diag/) |
+|       - CanRingBuffer         |       |  - UdsServiceHandler  |
+|  (Fixed-size, Lock-free FIFO) |       | (ISO 14229 Diag Stack)|
++---------------+---------------+       +-----------------------+
+                |
++---------------v---------------+       +-----------------------+
+|     Protocol Layer (proto/)   |       |       OSAL (os/)      |
+|    - CanCodec (Motorola MSB)  |       |   - OsPeriodicTimer   |
+|    - CanFrame (8-byte fixed)  |       | (FreeRTOS vTaskDelay) |
++---------------+---------------+       +-----------------------+
+                |
++---------------v---------------+
+|      Hardware Abstraction     |
+|          Layer (hal/)         |
+|      - ICanTransceiver        |
+|    - VirtualCanTransceiver    |
++-------------------------------+

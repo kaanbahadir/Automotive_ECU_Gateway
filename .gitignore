@@ -1,20 +1,20 @@
-# Derleme artıkları
+# Compilation artifacts
 build/
 bin/
 lib/
 
-# macOS sistem dosyaları
+# macOS system files
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Editör yapılandırmaları
+# Editor configurations
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Test ve kapsama çıktıları
+# Test and coverage outputs
 *.gcda
 *.gcno
 *.info
