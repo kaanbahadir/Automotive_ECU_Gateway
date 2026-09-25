@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/kaanbahadir/Desktop/Automotive_ECU_Gateway/tests/unit/test_codec'
+relocations:     []
+...

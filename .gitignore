@@ -1,0 +1,21 @@
+# Derleme artıkları
+build/
+bin/
+lib/
+
+# macOS sistem dosyaları
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editör yapılandırmaları
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test ve kapsama çıktıları
+*.gcda
+*.gcno
+*.info
+coverage_report/
