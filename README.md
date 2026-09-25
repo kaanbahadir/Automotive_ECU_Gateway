@@ -1,9 +1,9 @@
 # Automotive ECU Telemetry & UDS Gateway Simulation
 
-[![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
-<img src="https://img.shields.io/badge/CTest-7%2F7%20Passed-brightgreen.svg" alt="CTest Passed" />
-<img src="https://img.shields.io/badge/ISO-14229%20%7C%2011898-orange.svg" alt="ISO Standards" />
-<img src="https://img.shields.io/badge/MISRA--C%2B%2B-Zero%20Heap%20Policy-success.svg" alt="MISRA Policy" />
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](#)
+[![Build & Test](https://img.shields.io/badge/CTest-7%2F7%20Passed-brightgreen.svg)](#)
+[![Standard](https://img.shields.io/badge/ISO-14229%20%7C%2011898-orange.svg)](#)
+[![Compliance](https://img.shields.io/badge/MISRA--C%2B%2B-Zero%20Heap%20Policy-success.svg)](#)
 
 <p align="center">
   <img src="assets/ecu_demo.gif" alt="ECU Gateway Interactive TUI Demo" width="700">
