@@ -7,13 +7,12 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "ecu/app/vehicle_dynamics.hpp"
+#include "ecu/app/vehicle_dynamics_model.hpp"
 #include "ecu/tasks/telemetry_task.hpp"
 #include "ecu/tasks/can_dispatch_task.hpp"
 #include "ecu/diag/uds_service_handler.hpp"
 #include "ecu/hal/virtual_can_transceiver.hpp"
 
-// Non-blocking keyboard input helper for POSIX (macOS / Linux)
 class KeyboardController {
 public:
     KeyboardController() {
@@ -56,7 +55,7 @@ int main() {
 
     hal::VirtualCanTransceiver transceiver;
     core::CanRingBuffer<16> can_fifo;
-    app::VehicleDynamics dynamics;
+    app::VehicleDynamicsModel dynamics;
     diag::UdsServiceHandler uds_handler;
 
     tasks::TelemetryTask telemetry_task(dynamics, can_fifo);
@@ -71,7 +70,6 @@ int main() {
     int brake_level = 0;
     uint32_t loop_count = 0;
 
-    // Clear Screen & Hide Cursor
     std::cout << "\033[2J\033[?25l";
 
     while (running.load()) {
@@ -88,7 +86,6 @@ int main() {
             throttle_level = std::max(throttle_level - 10, 0);
             brake_level = std::max(brake_level - 10, 0);
         } else if (key == '1') {
-            // UDS Tester Present (0x3E 0x00)
             const uint8_t req[] = {0x3E, 0x00};
             uint8_t res[8] = {0};
             size_t res_len = 0;
@@ -96,7 +93,6 @@ int main() {
             last_uds_req = "0x3E 0x00 (Tester Present)";
             last_uds_res = "0x7E 0x00 (Positive Response)";
         } else if (key == '2') {
-            // UDS Read VIN (0x22 0xF1 0x90)
             const uint8_t req[] = {0x22, 0xF1, 0x90};
             uint8_t res[32] = {0};
             size_t res_len = 0;
@@ -104,7 +100,6 @@ int main() {
             last_uds_req = "0x22 0xF1 0x90 (Read VIN)";
             last_uds_res = "0x62 0xF1 0x90 [WVWZZZ3CZWE123456]";
         } else if (key == '3') {
-            // UDS Telemetry Snapshot (0x22 0x20 0x01)
             const uint8_t req[] = {0x22, 0x20, 0x01};
             uint8_t res[32] = {0};
             size_t res_len = 0;
@@ -112,7 +107,6 @@ int main() {
             last_uds_req = "0x22 0x20 0x01 (Live Telemetry DID)";
             last_uds_res = "0x62 0x20 0x01 [Payload Snapshot OK]";
         } else if (key == '4') {
-            // UDS Invalid Service (0x99 -> NRC 0x11)
             const uint8_t req[] = {0x99};
             uint8_t res[8] = {0};
             size_t res_len = 0;
@@ -121,43 +115,36 @@ int main() {
             last_uds_res = "0x7F 0x99 0x11 (NRC: ServiceNotSupported)";
         }
 
-        // Execute Periodic ECU Tasks (50 Hz rate)
         dynamics.setThrottle(static_cast<float>(throttle_level));
         dynamics.setBrake(static_cast<float>(brake_level));
         telemetry_task.runStep();
         dispatch_task.runStep();
 
-        // Refresh Terminal Dashboard at ~20 Hz
         if (loop_count % 2 == 0) {
-            std::cout << "\033[H"; // Move cursor to top-left
+            std::cout << "\033[H";
             std::cout << "\033[1;36m=======================================================================\033[0m\n";
             std::cout << "\033[1;37m        AUTOMOTIVE ECU GATEWAY - LIVE INTERACTIVE DASHBOARD            \033[0m\n";
             std::cout << "\033[1;36m=======================================================================\033[0m\n\n";
 
-            // Meters
             drawBar("RPM", dynamics.getRpm(), 7000.0, 32, "\033[1;32m");
             std::cout << " rpm\n";
             drawBar("SPEED", dynamics.getSpeedKmH(), 240.0, 32, "\033[1;34m");
             std::cout << " km/h\n\n";
 
-            // Telemetry Box
             std::cout << "  \033[1m[VEHICLE STATE]\033[0m\n";
             std::cout << "  Coolant Temp : " << std::fixed << std::setprecision(1) << dynamics.getCoolantTemp() << " C   |  ";
             std::cout << "Battery Voltage : " << std::fixed << std::setprecision(2) << dynamics.getBatteryVoltage() << " V\n";
             std::cout << "  Throttle Ped : " << throttle_level << " %          |  ";
             std::cout << "Brake Pedal     : " << brake_level << " %\n\n";
 
-            // Bus Traffic
             std::cout << "  \033[1m[CAN BUS METRICS (ISO 11898)]\033[0m\n";
             std::cout << "  Total CAN Frames Transmitted : " << transceiver.getTransmittedCount() << "\n";
             std::cout << "  Active Telemetry Frame ID    : 0x100 (Cyclic 50 Hz)\n\n";
 
-            // UDS Diag Console
             std::cout << "  \033[1m[ISO 14229 UDS DIAGNOSTIC STACK]\033[0m\n";
             std::cout << "  Last Request  : " << last_uds_req << "\n";
             std::cout << "  Last Response : \033[1;33m" << last_uds_res << "\033[0m\n\n";
 
-            // Control Guide
             std::cout << "\033[1;30;47m  CONTROLS: [W] Gas  [S] Brake  [A] Coast  [1..4] Diag Query  [Q] Exit \033[0m\n";
             std::cout.flush();
         }
@@ -166,7 +153,6 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
-    // Restore terminal & Show cursor
     std::cout << "\033[?25h\033[2J\033[H";
     std::cout << "ECU Simulation terminated gracefully. Total TX frames: " 
               << transceiver.getTransmittedCount() << "\n";
