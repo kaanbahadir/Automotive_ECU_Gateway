@@ -19,7 +19,7 @@ A production-grade, AUTOSAR-inspired Automotive Electronic Control Unit (ECU) Te
 +-------------------------------+-------------------------------+
                                 |
 +-------------------------------v-------------------------------+
-|                      Tasks Layer (tasks/)                     |
+|                       Tasks Layer (tasks/)                    |
 |           - TelemetryTask (50 Hz periodic producer)           |
 |           - CanDispatchTask (Asynchronous consumer)           |
 +---------------+-------------------------------+---------------+
