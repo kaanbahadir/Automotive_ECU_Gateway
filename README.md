@@ -48,9 +48,9 @@ A production-grade, AUTOSAR-inspired Automotive Electronic Control Unit (ECU) Te
 ## 🚀 Quick Start & Interactive Demo
 
 ### Prerequisites
-- C++17 compliant compiler (AppleClang, GCC, or Clang)
+- C++17 compliant compiler (AppleClang 15+, GCC 12+, or Clang 15+)
 - CMake 3.20+
-- POSIX-compliant terminal environment (macOS / Linux)
+- POSIX-compliant environment (macOS / Linux / Windows WSL2)
 
 ### Build
 ```bash
